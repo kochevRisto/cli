@@ -1,0 +1,39 @@
+{
+    "data": {
+        "search": {
+            "repositoryCount": 580,
+            "nodes": [
+                {
+                    "id": "MDEwOlJlcG9zaXRvcnkyOTk4NzIzODk=",
+                    "name": "termiboard",
+                    "url": "https://github.com/IEEE-VIT/termiboard",
+                    "owner": {
+                        "login": "IEEE-VIT"
+                    },
+                    "description": "A smart CLI Dashboard to fetch cpu, memory and network stats!",
+                    "stargazerCount": 17,
+                    "createdAt": "2020-09-30T09:35:24Z",
+                    "forkCount": 11,
+                    "primaryLanguage": {
+                        "name": "Go"
+                    }
+                },
+                {
+                    "id": "MDEwOlJlcG9zaXRvcnkzMDAwMDc4MTU=",
+                    "name": "enumtag",
+                    "url": "https://github.com/tcard/enumtag",
+                    "owner": {
+                        "login": "tcard"
+                    },
+                    "description": "Package enumtag.",
+                    "stargazerCount": 5,
+                    "createdAt": "2020-09-30T18:00:21Z",
+                    "forkCount": 0,
+                    "primaryLanguage": {
+                        "name": "Go"
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -25,6 +25,10 @@ type Repository struct {
 	CreatedAt   time.Time
 	Owner       RepositoryOwner
 
+	StargazerCount  int
+	ForkCount       int
+	PrimaryLanguage PrimaryLanguage
+
 	IsPrivate        bool
 	HasIssuesEnabled bool
 	ViewerPermission string
@@ -43,6 +47,11 @@ type RepositoryOwner struct {
 
 // BranchRef is the branch name in a GitHub repository
 type BranchRef struct {
+	Name string
+}
+
+// PrimaryLanguage is the primary language used in GitHub repositroy
+type PrimaryLanguage struct {
 	Name string
 }
 
@@ -864,4 +873,53 @@ func MilestoneByNumber(client *Client, repo ghrepo.Interface, number int) (*Repo
 	}
 
 	return query.Repository.Milestone, nil
+}
+
+// GitHubTrending fetches all the repos that are created in a date range sorted by stars
+func GitHubTrending(client *Client, dateRange, language, host string) ([]Repository, int, error) {
+	query := `
+	query TrendingRepositories($query: String!, $type: SearchType!, $first: Int) {
+		search(query: $query, type: $type, first: $first) {
+			repositoryCount
+			nodes {
+				... on Repository {
+					id
+					name
+					url
+					owner { login }
+					description
+					stargazerCount
+					createdAt
+					forkCount
+					primaryLanguage {
+						name
+					}
+				}
+			}
+		}
+	}`
+
+	if language != "" {
+		language = fmt.Sprintf("language:%s", language)
+	}
+
+	variables := map[string]interface{}{
+		"query": fmt.Sprintf("sort:stars-desc %s %s", dateRange, language),
+		"type":  "REPOSITORY",
+		"first": 30,
+	}
+
+	result := struct {
+		Search struct {
+			RepositoryCount int
+			Nodes           []Repository
+		}
+	}{}
+
+	err := client.GraphQL(host, query, variables, &result)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return result.Search.Nodes, result.Search.RepositoryCount, nil
 }
